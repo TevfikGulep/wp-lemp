@@ -43,14 +43,14 @@ sudo ufw allow http
 sudo chown www-data:www-data /usr/share/nginx/html -R
 sudo chown www-data:www-data /var/www/ -R
 
-#Install PHP7.4 and common PHP packages
-echo "Install PHP 7.4"
+#Install PHP8.1 and common PHP packages
+echo "Install PHP 8.1"
 
-sudo apt install -y php7.4 php7.4-fpm php7.4-mysql php-common php7.4-cli php7.4-common php7.4-json php7.4-opcache php7.4-readline php7.4-mbstring php7.4-xml php7.4-gd php7.4-curl
+sudo apt install -y php8.1 php8.1-fpm php8.1-mysql php-common php8.1-cli php8.1-common php8.1-json php8.1-opcache php8.1-readline php8.1-mbstring php8.1-xml php8.1-gd php8.1-curl
 
 
-sudo systemctl enable php7.4-fpm
-sudo systemctl start php7.4-fpm
+sudo systemctl enable php8.1-fpm
+sudo systemctl start php8.1-fpm
 
 
 #Install Composer
@@ -65,10 +65,10 @@ systemctl restart memcached
 
 
 #Update PHP CLI configuration
-sed -i "s/error_reporting = .*/error_reporting = E_ALL/" /etc/php/7.4/cli/php.ini
-sed -i "s/display_errors = .*/display_errors = On/" /etc/php/7.4/cli/php.ini
-sed -i "s/memory_limit = .*/memory_limit = 512M/" /etc/php/7.4/cli/php.ini
-sed -i "s/;date.timezone.*/date.timezone = UTC/" /etc/php/7.4/cli/php.ini
+sed -i "s/error_reporting = .*/error_reporting = E_ALL/" /etc/php/8.1/cli/php.ini
+sed -i "s/display_errors = .*/display_errors = On/" /etc/php/8.1/cli/php.ini
+sed -i "s/memory_limit = .*/memory_limit = 512M/" /etc/php/8.1/cli/php.ini
+sed -i "s/;date.timezone.*/date.timezone = UTC/" /etc/php/8.1/cli/php.ini
 
 #Configure sessions directory permissions
 chmod 733 /var/lib/php/sessions
@@ -76,22 +76,22 @@ chmod +t /var/lib/php/sessions
 
 
 #Tweak PHP-FPM settings
-sed -i "s/error_reporting = .*/error_reporting = E_ALL \& ~E_NOTICE \& ~E_STRICT \& ~E_DEPRECATED/" /etc/php/7.4/fpm/php.ini
-sed -i "s/display_errors = .*/display_errors = Off/" /etc/php/7.4/fpm/php.ini
-sed -i "s/memory_limit = .*/memory_limit = 512M/" /etc/php/7.4/fpm/php.ini
-sed -i "s/upload_max_filesize = .*/upload_max_filesize = 256M/" /etc/php/7.4/fpm/php.ini
-sed -i "s/post_max_size = .*/post_max_size = 256M/" /etc/php/7.4/fpm/php.ini
-sed -i "s/;date.timezone.*/date.timezone = UTC/" /etc/php/7.4/fpm/php.ini
+sed -i "s/error_reporting = .*/error_reporting = E_ALL \& ~E_NOTICE \& ~E_STRICT \& ~E_DEPRECATED/" /etc/php/8.1/fpm/php.ini
+sed -i "s/display_errors = .*/display_errors = Off/" /etc/php/8.1/fpm/php.ini
+sed -i "s/memory_limit = .*/memory_limit = 512M/" /etc/php/8.1/fpm/php.ini
+sed -i "s/upload_max_filesize = .*/upload_max_filesize = 256M/" /etc/php/8.1/fpm/php.ini
+sed -i "s/post_max_size = .*/post_max_size = 256M/" /etc/php/8.1/fpm/php.ini
+sed -i "s/;date.timezone.*/date.timezone = UTC/" /etc/php/8.1/fpm/php.ini
 
 #Tune PHP-FPM pool settings
 
-sed -i "s/;listen\.mode =.*/listen.mode = 0666/" /etc/php/7.4/fpm/pool.d/www.conf
-sed -i "s/;request_terminate_timeout =.*/request_terminate_timeout = 60/" /etc/php/7.4/fpm/pool.d/www.conf
-sed -i "s/pm\.max_children =.*/pm.max_children = 70/" /etc/php/7.4/fpm/pool.d/www.conf
-sed -i "s/pm\.start_servers =.*/pm.start_servers = 20/" /etc/php/7.4/fpm/pool.d/www.conf
-sed -i "s/pm\.min_spare_servers =.*/pm.min_spare_servers = 20/" /etc/php/7.4/fpm/pool.d/www.conf
-sed -i "s/pm\.max_spare_servers =.*/pm.max_spare_servers = 35/" /etc/php/7.4/fpm/pool.d/www.conf
-sed -i "s/;pm\.max_requests =.*/pm.max_requests = 500/" /etc/php/7.4/fpm/pool.d/www.conf
+sed -i "s/;listen\.mode =.*/listen.mode = 0666/" /etc/php/8.1/fpm/pool.d/www.conf
+sed -i "s/;request_terminate_timeout =.*/request_terminate_timeout = 60/" /etc/php/8.1/fpm/pool.d/www.conf
+sed -i "s/pm\.max_children =.*/pm.max_children = 70/" /etc/php/8.1/fpm/pool.d/www.conf
+sed -i "s/pm\.start_servers =.*/pm.start_servers = 20/" /etc/php/8.1/fpm/pool.d/www.conf
+sed -i "s/pm\.min_spare_servers =.*/pm.min_spare_servers = 20/" /etc/php/8.1/fpm/pool.d/www.conf
+sed -i "s/pm\.max_spare_servers =.*/pm.max_spare_servers = 35/" /etc/php/8.1/fpm/pool.d/www.conf
+sed -i "s/;pm\.max_requests =.*/pm.max_requests = 500/" /etc/php/8.1/fpm/pool.d/www.conf
 
 #Tweak Nginx settings
 
@@ -262,7 +262,7 @@ if ! echo "server {
   }
 
   location ~ \.php$ {
-    fastcgi_pass unix:/run/php/php7.4-fpm.sock;
+    fastcgi_pass unix:/run/php/php8.1-fpm.sock;
     fastcgi_param SCRIPT_FILENAME "'$document_root$fastcgi_script_name'";
     include fastcgi_params;
     include snippets/fastcgi-php.conf;
@@ -298,7 +298,7 @@ rm /etc/nginx/sites-enabled/default
 apt install -y python3-certbot-nginx
 
 #Restart PHP-FPM and Nginx
-systemctl restart php7.4-fpm; systemctl restart nginx;
+systemctl restart php8.1-fpm; systemctl restart nginx;
 
 echo 'LEMP Stack has been Installed \nNow downloding latest wordpress'
 sleep 3
